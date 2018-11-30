@@ -14,8 +14,6 @@ public class RegistrationFormApplication extends Application {
 		loader.setLocation(getClass().getResource("registration_form.fxml"));
 		Parent root = loader.load();
 		
-//		Parent root = FXMLLoader.load(getClass().getResource("/registration_form.fxml"));
-		
 		primaryStage.setTitle("Login Form");
 		primaryStage.setScene(new Scene(root, 800, 500));
 		primaryStage.show();
