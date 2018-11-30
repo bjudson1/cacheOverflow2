@@ -3,6 +3,7 @@ package cacheOverflow2;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -96,9 +97,24 @@ public class UI extends Application {
 		anchorPane.getChildren().add(backlogButton);
 		
 		//add backlog area
+		Label backlogLabel = new Label("Backlog");
+		backlogLabel.setLayoutX(50);
+		backlogLabel.setLayoutY(75);
 		Rectangle backlogArea = new Rectangle(50,100,200,450);
 		backlogArea.setFill(Color.WHITE);
 		anchorPane.getChildren().add(backlogArea);
+		anchorPane.getChildren().add(backlogLabel);
+		
+		//add sprint backlog area
+		Label sprintBacklogLabel = new Label("Sprint Backlog");
+		sprintBacklogLabel.setLayoutX(300);
+		sprintBacklogLabel.setLayoutY(75);
+		Rectangle sprintBacklogArea = new Rectangle(300,100,200,450);
+		sprintBacklogArea.setFill(Color.WHITE);
+		anchorPane.getChildren().add(sprintBacklogArea);
+		anchorPane.getChildren().add(sprintBacklogLabel);
+
+
 	}
 	
 	public void readInput() {
