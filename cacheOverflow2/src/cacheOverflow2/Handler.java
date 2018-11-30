@@ -35,5 +35,11 @@ public class Handler implements Runnable{
 		catch(IOException ex){
 			System.err.println(ex);
 		}
+		try {
+			socket.close();
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 }

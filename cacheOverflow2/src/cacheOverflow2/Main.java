@@ -7,6 +7,9 @@ public class Main {
 		
 		//UI ui = new UI();
 		UI.run(args);
+		
+		Server server = new Server();
+		server.initialize();
 	}
 
 }

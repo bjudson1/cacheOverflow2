@@ -14,8 +14,6 @@ public class Server {
 		clientCount = 0;
 	}
 	
-	
-	
 	public void initialize() {
 		new Thread( () -> {
 			try {
