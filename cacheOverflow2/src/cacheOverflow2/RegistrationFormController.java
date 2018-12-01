@@ -13,9 +13,6 @@ public class RegistrationFormController {
 	private TextField nameField;
 
 	@FXML
-	private TextField emailField;
-
-	@FXML
 	private PasswordField passwordField;
 
 	@FXML
@@ -24,19 +21,13 @@ public class RegistrationFormController {
 	@FXML
 	protected void handleSubmitButtonAction(ActionEvent event){
 		Window owner = submitButton.getScene().getWindow();
-		/*
+		/* 
 		 * Make sure the user entered all of the text fields. If they
 		 * did not, display an error message.
 		 */
 		if(nameField.getText().isEmpty()){
 			AlertHelper.showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
 							 	  "Please enter your name");
-			return;
-		}
-
-		if(emailField.getText().isEmpty()){
-			AlertHelper.showAlert(Alert.AlertType.ERROR, owner, "Form Error!",
-							 	  "Please enter your email id");
 			return;
 		}
 		
@@ -47,7 +38,7 @@ public class RegistrationFormController {
 		}
 	
 		/* The user enetered all of their information correctly */	
-		AlertHelper.showAlert(Alert.AlertType.CONFIRMATION, owner, "Registration Successfull!",
+		AlertHelper.showAlert(Alert.AlertType.CONFIRMATION, owner, "Authentication Successfull!",
 							  "Welcome " + nameField.getText());
 
 	}
