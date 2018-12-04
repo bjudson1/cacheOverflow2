@@ -16,14 +16,14 @@
 <?import javafx.scene.control.Button?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cacheOverflow2.MainFormController">
    <children>
       <Pane layoutX="14.0" layoutY="12.0" prefHeight="107.0" prefWidth="562.0">
          <children>
-            <Button layoutX="50.0" layoutY="43.0" mnemonicParsing="false" text="Add" />
-            <Button layoutX="183.0" layoutY="43.0" mnemonicParsing="false" text="Sprint" />
-            <Button layoutX="319.0" layoutY="42.0" mnemonicParsing="false" text="Finish" />
-            <Button layoutX="441.0" layoutY="42.0" mnemonicParsing="false" text="Remove" />
+            <Button fx:id="addButton" layoutX="50.0" layoutY="43.0" mnemonicParsing="false" onAction="#handleAddButtonAction" text="Add" />
+            <Button fx:id="sprintButton" layoutX="183.0" layoutY="43.0" mnemonicParsing="false" onAction="#handleSprintButtonAction" text="Sprint" />
+            <Button fx:id="finishButton" layoutX="319.0" layoutY="42.0" mnemonicParsing="false" onAction="#handleFinishButtonAction" text="Finish" />
+            <Button fx:id="removeButton" layoutX="453.0" layoutY="42.0" mnemonicParsing="false" onAction="#handleRemoveButtonAction" text="Remove" />
          </children>
       </Pane>
       <Pane layoutX="6.0" layoutY="125.0" prefHeight="271.0" prefWidth="373.0">
