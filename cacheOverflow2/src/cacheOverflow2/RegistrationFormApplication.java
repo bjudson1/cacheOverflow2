@@ -6,17 +6,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class UI extends Application {
+public class RegistrationFormApplication extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("XML/registration_form.fxml"));
-		primaryStage.setTitle("Registration Form FXML Application");
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource("registration_form.fxml"));
+		Parent root = loader.load();
+		
+		primaryStage.setTitle("Login Form");
 		primaryStage.setScene(new Scene(root, 800, 500));
 		primaryStage.show();
 	}
 
-	public static void run(String[] args){
+	public static void main(String[] args){
 		launch(args);
 	}
 }
