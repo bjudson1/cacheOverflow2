@@ -1,21 +1,36 @@
 package cacheOverflow2;
 
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Observable;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class StoryFactory extends Observable{
-	private ObservableList<UserStory> productBacklog;
-	private ObservableList<UserStory> sprintBackLog;
-	private ObservableList<UserStory> completed;
+public class StoryFactory extends Observable implements Serializable{
+	private ArrayList<UserStory> productBacklog;
+	private ArrayList<UserStory> sprintBackLog;
+	private ArrayList<UserStory> completed;
+	private UserStory selectedStory;
 	
+	private ArrayList<ArrayList<UserStory>> allLogs;
+	private static final long serialVersionUID = 1L;
 	private static StoryFactory instance = null;
 
 	public StoryFactory() {
-		productBacklog = FXCollections.observableArrayList();
-		sprintBackLog = FXCollections.observableArrayList();
+		productBacklog = new ArrayList<UserStory>();
+		sprintBackLog = new ArrayList<UserStory>();
+		completed = new ArrayList<UserStory>();
+		allLogs = new ArrayList<ArrayList<UserStory>>(); 
+		allLogs.add(productBacklog);
+		allLogs.add(sprintBackLog);
+		allLogs.add(completed);
 	}
 	
 	public static StoryFactory getInstance() {
@@ -24,6 +39,33 @@ public class StoryFactory extends Observable{
 		}
 		
 		return instance;
+	}
+	
+	public void saveState() {
+		try{
+			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("saveState.dat"));
+			out.writeObject(allLogs);
+			out.close();
+		} catch(IOException e) {
+			System.err.println(e);
+		}
+	}
+	
+	public void loadState() throws ClassNotFoundException {
+		try{
+			ObjectInputStream in = new ObjectInputStream(new FileInputStream("saveState.dat"));
+			allLogs = (ArrayList<ArrayList<UserStory>>) in.readObject();
+			in.close();
+		} catch(IOException e) {
+			System.err.println(e);
+		}
+		
+		productBacklog = allLogs.get(0);
+		sprintBackLog = allLogs.get(1);
+		completed = allLogs.get(2);
+		
+		setChanged();
+		notifyObservers();
 	}
 	
 	public void addStory(String title, String author, String description, int points) {
@@ -84,16 +126,37 @@ public class StoryFactory extends Observable{
 			sprintBackLog.remove(index);
 		}
 		
+		else if(logNum == 2) {
+			completed.remove(index);
+		}
+		
 		setChanged();
 		notifyObservers();
 	}
 	
-	
+	//return as observable list
 	public ObservableList<UserStory> getProductBacklog(){
-		return productBacklog;
+		return FXCollections.observableArrayList(productBacklog);
 	}
 	
+	//return as observable list
 	public ObservableList<UserStory> getSprintBacklog(){
-		return sprintBackLog;
+		return FXCollections.observableArrayList(sprintBackLog);
+	}
+	
+	//return as observable list
+	public ObservableList<UserStory> getcompletedLog(){
+		return FXCollections.observableArrayList(completed);
+	}
+	
+	public void setSelectedStory(UserStory storyIn){
+		selectedStory = storyIn;
+	}
+	
+	public void setSelectedStoryDate(int date) {
+		selectedStory.setFinishDate(date);
+		
+		setChanged();
+		notifyObservers();
 	}
 }

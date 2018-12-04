@@ -40,7 +40,7 @@
                               <Label layoutX="233.0" layoutY="18.0" text="Sprint Backlog" />
                            </children>
                         </Pane>
-                        <ListView fx:id="SprintBacklog1" layoutX="398.0" layoutY="111.0" prefHeight="199.0" prefWidth="138.0" />
+                        <ListView fx:id="completionLog" layoutX="398.0" layoutY="111.0" prefHeight="199.0" prefWidth="138.0" />
                         <LineChart layoutX="550.0" layoutY="123.0" prefHeight="234.0" prefWidth="233.0">
                           <xAxis>
                             <CategoryAxis side="BOTTOM" />
