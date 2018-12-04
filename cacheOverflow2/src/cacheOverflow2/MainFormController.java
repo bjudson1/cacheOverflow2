@@ -35,9 +35,15 @@ public class MainFormController implements Observer, Initializable{
 
 	@FXML
 	private Button sprintButton;
+	
+	@FXML
+	private Button unsprintButton;
 
 	@FXML
 	private Button finishButton;
+	
+	@FXML
+	private Button unfinishButton;
 
 	@FXML
 	private Button removeButton;
@@ -106,6 +112,20 @@ public class MainFormController implements Observer, Initializable{
 		
 		StoryFactory.getInstance().sprintStory(selectedStory);
 	}
+	
+	@FXML
+	protected void handleUnsprintButtonAction(ActionEvent event) {
+		Window owner = unsprintButton.getScene().getWindow();
+
+		int selectedStory = SprintBacklog.getSelectionModel().getSelectedIndex();
+				
+		if(selectedStory == -1) {
+			AlertHelper.showAlert(Alert.AlertType.ERROR, owner, "Form Error!", "Must select a story from the sprint backlog.");
+			return;
+		}
+				
+		StoryFactory.getInstance().unsprintStory(selectedStory);
+	}
 
 	@FXML
 	protected void handleFinishButtonAction(ActionEvent event) {
@@ -119,7 +139,6 @@ public class MainFormController implements Observer, Initializable{
 		
 		//set selected story
 		StoryFactory.getInstance().setSelectedStory(StoryFactory.getInstance().getSprintBacklog().get(selectedIndex));
-		
 		
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("dateEntryForm.fxml"));
@@ -135,6 +154,27 @@ public class MainFormController implements Observer, Initializable{
 		}
 
 		StoryFactory.getInstance().finishStory(selectedIndex);
+	}
+	
+	@FXML
+	protected void handleUnfinishButtonAction(ActionEvent event) {
+		
+		System.out.println("heyhey");
+
+		Window owner = unfinishButton.getScene().getWindow();
+		int selectedIndex = completionLog.getSelectionModel().getSelectedIndex();
+		
+		if(selectedIndex == -1) {
+			AlertHelper.showAlert(Alert.AlertType.ERROR, owner, "Form Error!", "Must select a story from the completion backlog.");
+			return;
+		}
+		
+		//set selected story
+		StoryFactory.getInstance().setSelectedStory(StoryFactory.getInstance().getSprintBacklog().get(selectedIndex));
+		//clear finish date
+		StoryFactory.getInstance().getSelectedStory().setFinishDate(0);
+		//move story
+		StoryFactory.getInstance().unfinishStory(selectedIndex);
 	}
 
 	@FXML
@@ -177,27 +217,21 @@ public class MainFormController implements Observer, Initializable{
 		ObservableList<String> finished_titles = FXCollections.observableArrayList();
 		
 		for(UserStory story : StoryFactory.getInstance().getProductBacklog()) {
-			backlog_titles.add(String.format("%s | %s | %d", story.getTitle(), story.getAuthor(), story.getScore()));
+			backlog_titles.add(String.format("%s\n%s | %d points", story.getTitle(), story.getAuthor(), story.getScore()));
 		}
 		
 		for(UserStory story : StoryFactory.getInstance().getSprintBacklog()) {
-			sprint_titles.add(String.format("%s | %s | %d", story.getTitle(), story.getAuthor(), story.getScore()));
+			sprint_titles.add(String.format("%s\n%s | %d points", story.getTitle(), story.getAuthor(), story.getScore()));
 		}
 		
 		for(UserStory story : StoryFactory.getInstance().getcompletedLog()) {
-			finished_titles.add(String.format("%s | %s | %d | %d", story.getTitle(), story.getAuthor(), story.getScore(), story.getFinishDate()));
+			finished_titles.add(String.format("%s\n%s | %d points\nCompleted: Day %d", story.getTitle(), story.getAuthor(), story.getScore(), story.getFinishDate()));
 		}
 		
 		productBacklog.setItems(backlog_titles);
 		SprintBacklog.setItems(sprint_titles);
 		completionLog.setItems(finished_titles);
-		
-		productBacklog.fireEvent(new ActionEvent());
-		
-		System.out.println(backlog_titles);
-		System.out.println(sprint_titles);
-		System.out.println(finished_titles);
-		
+				
 		updateGraph();
 	}
 	

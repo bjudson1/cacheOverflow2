@@ -83,6 +83,14 @@ public class StoryFactory extends Observable implements Serializable{
 		notifyObservers();
 	}
 	
+	public void unsprintStory(int index) {
+		productBacklog.add(sprintBackLog.get(index));
+		sprintBackLog.remove(index);
+		
+		setChanged();
+		notifyObservers();
+	}
+	
 	public void sprintStory(int index) {
 		sprintBackLog.add(productBacklog.get(index));
 		productBacklog.remove(index);
@@ -94,6 +102,14 @@ public class StoryFactory extends Observable implements Serializable{
 	public void finishStory(UserStory story) {
 		sprintBackLog.remove(story);
 		completed.add(story);
+		
+		setChanged();
+		notifyObservers();
+	}
+	
+	public void unfinishStory(int index) {
+		sprintBackLog.add(completed.get(index));
+		completed.remove(index);
 		
 		setChanged();
 		notifyObservers();
@@ -151,6 +167,10 @@ public class StoryFactory extends Observable implements Serializable{
 	
 	public void setSelectedStory(UserStory storyIn){
 		selectedStory = storyIn;
+	}
+	
+	public UserStory getSelectedStory() {
+		return selectedStory;
 	}
 	
 	public void setSelectedStoryDate(int date) {

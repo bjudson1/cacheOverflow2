@@ -17,38 +17,41 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cacheOverflow2.MainFormController">
    <children>
-      <TabPane prefHeight="500.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutY="-7.0" prefHeight="500.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Overview">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="800.0">
                      <children>
-                        <Pane prefHeight="107.0" prefWidth="562.0">
+                        <Pane layoutX="13.0" layoutY="3.0" prefHeight="462.0" prefWidth="505.0">
                            <children>
-                              <Button fx:id="addButton" layoutX="50.0" layoutY="43.0" mnemonicParsing="false" onAction="#handleAddButtonAction" text="Add" />
-                              <Button fx:id="sprintButton" layoutX="183.0" layoutY="43.0" mnemonicParsing="false" onAction="#handleSprintButtonAction" text="Sprint" />
-                              <Button fx:id="finishButton" layoutX="319.0" layoutY="42.0" mnemonicParsing="false" onAction="#handleFinishButtonAction" text="Finish" />
-                              <Button fx:id="removeButton" layoutX="453.0" layoutY="42.0" mnemonicParsing="false" onAction="#handleRemoveButtonAction" text="Remove" />
-                              <Label layoutX="407.0" layoutY="84.0" text="Completion Log" />
+                              <ListView fx:id="productBacklog" layoutX="25.0" layoutY="39.0" prefHeight="383.0" prefWidth="183.0" />
+                              <ListView fx:id="SprintBacklog" layoutX="257.0" layoutY="40.0" prefHeight="381.0" prefWidth="199.0" />
+                              <Label layoutX="23.0" layoutY="17.0" text="Product Backlog" />
+                              <Label layoutX="257.0" layoutY="18.0" text="Sprint Backlog" />
+                              <Button fx:id="unsprintButton" layoutX="212.0" layoutY="216.0" mnemonicParsing="false" onAction="#handleUnsprintButtonAction" prefHeight="14.0" prefWidth="39.0" text="&lt;-" />
+                              <Button fx:id="finishButton" layoutX="475.0" layoutY="78.0" mnemonicParsing="false" onAction="#handleFinishButtonAction" text="-&gt;" />
+                              <Button fx:id="sprintButton" layoutX="212.0" layoutY="182.0" mnemonicParsing="false" onAction="#handleSprintButtonAction" prefHeight="14.0" prefWidth="39.0" text="-&gt;" />
+                              <Button fx:id="unfinishButton" layoutX="475.0" layoutY="114.0" mnemonicParsing="false" onAction="#handleUnfinishButtonAction" text="&lt;-" />
+                              <Button fx:id="removeButton" layoutX="80.0" layoutY="428.0" mnemonicParsing="false" onAction="#handleRemoveButtonAction" text="Remove" />
+                              <Button fx:id="addButton" layoutX="23.0" layoutY="428.0" mnemonicParsing="false" onAction="#handleAddButtonAction" text="Add" />
+                              <Button layoutX="159.0" layoutY="428.0" mnemonicParsing="false" text="Details" />
                            </children>
                         </Pane>
-                        <Pane layoutX="7.0" layoutY="74.0" prefHeight="271.0" prefWidth="373.0">
+                        <Pane layoutX="516.0" layoutY="2.0" prefHeight="457.0" prefWidth="275.0">
                            <children>
-                              <ListView fx:id="productBacklog" layoutX="25.0" layoutY="39.0" prefHeight="199.0" prefWidth="138.0" />
-                              <ListView fx:id="SprintBacklog" layoutX="214.0" layoutY="38.0" prefHeight="199.0" prefWidth="138.0" />
-                              <Label layoutX="42.0" layoutY="18.0" text="Product Backlog" />
-                              <Label layoutX="233.0" layoutY="18.0" text="Sprint Backlog" />
+                              <LineChart layoutY="214.0" prefHeight="234.0" prefWidth="233.0">
+                                <xAxis>
+                                  <CategoryAxis side="BOTTOM" />
+                                </xAxis>
+                                <yAxis>
+                                  <NumberAxis side="LEFT" />
+                                </yAxis>
+                              </LineChart>
+                              <ListView fx:id="completionLog" layoutX="26.0" layoutY="32.0" prefHeight="156.0" prefWidth="245.0" />
+                              <Label layoutX="31.0" layoutY="15.0" text="Completion Log" />
                            </children>
                         </Pane>
-                        <ListView fx:id="completionLog" layoutX="398.0" layoutY="111.0" prefHeight="199.0" prefWidth="138.0" />
-                        <LineChart layoutX="550.0" layoutY="123.0" prefHeight="234.0" prefWidth="233.0">
-                          <xAxis>
-                            <CategoryAxis side="BOTTOM" />
-                          </xAxis>
-                          <yAxis>
-                            <NumberAxis side="LEFT" />
-                          </yAxis>
-                        </LineChart>
                      </children>
                   </AnchorPane>
             </content>
