@@ -49,6 +49,18 @@ public class MainFormController implements Observer, Initializable{
 	private Button removeButton;
 	
 	@FXML
+	private Button assignButton;
+	
+	@FXML
+	private Button unassignButton;
+	
+	@FXML
+	private Button inprogressButton;
+	
+	@FXML
+	private Button notInprogressButton;
+	
+	@FXML
 	private ListView<String> productBacklog;
 	
 	@FXML
@@ -158,9 +170,6 @@ public class MainFormController implements Observer, Initializable{
 	
 	@FXML
 	protected void handleUnfinishButtonAction(ActionEvent event) {
-		
-		System.out.println("heyhey");
-
 		Window owner = unfinishButton.getScene().getWindow();
 		int selectedIndex = completionLog.getSelectionModel().getSelectedIndex();
 		
@@ -170,7 +179,7 @@ public class MainFormController implements Observer, Initializable{
 		}
 		
 		//set selected story
-		StoryFactory.getInstance().setSelectedStory(StoryFactory.getInstance().getSprintBacklog().get(selectedIndex));
+		StoryFactory.getInstance().setSelectedStory(StoryFactory.getInstance().getcompletedLog().get(selectedIndex));
 		//clear finish date
 		StoryFactory.getInstance().getSelectedStory().setFinishDate(0);
 		//move story
@@ -179,7 +188,7 @@ public class MainFormController implements Observer, Initializable{
 
 	@FXML
 	protected void handleRemoveButtonAction(ActionEvent event) {
-		Window owner = finishButton.getScene().getWindow();
+		Window owner = removeButton.getScene().getWindow();
 		int correspondingLog = 0;
 		
 		int selectedStory = productBacklog.getSelectionModel().getSelectedIndex();
@@ -203,6 +212,78 @@ public class MainFormController implements Observer, Initializable{
 		
 		StoryFactory.getInstance().removeStory(selectedStory,correspondingLog);		
 	}
+	
+	public void handleAssignButtonAction(ActionEvent event) {
+		Window owner = assignButton.getScene().getWindow();
+		
+		int selectedIndex = waitingLog.getSelectionModel().getSelectedIndex();
+		
+		if(selectedIndex == -1) {
+			AlertHelper.showAlert(Alert.AlertType.ERROR, owner, "Form Error!", "Must select a story from waiting backlog.");
+			return;
+		}
+		
+		//find story by title
+		UserStory story = StoryFactory.getInstance().findByTitle(waitingLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+
+		StoryFactory.getInstance().setSelectedStory(story);
+		StoryFactory.getInstance().setSelectedStorySprintStatus(1);
+	}
+	
+	public void handleUnassignButtonAction(ActionEvent event) {
+		Window owner = unassignButton.getScene().getWindow();
+		
+		int selectedIndex = assignedLog.getSelectionModel().getSelectedIndex();
+		
+		if(selectedIndex == -1) {
+			AlertHelper.showAlert(Alert.AlertType.ERROR, owner, "Form Error!", "Must select a story from assigned backlog.");
+			return;
+		}
+		
+		//find story by title
+		UserStory story = StoryFactory.getInstance().findByTitle(assignedLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+		
+		StoryFactory.getInstance().setSelectedStory(story);
+		StoryFactory.getInstance().setSelectedStorySprintStatus(0);
+	}
+	
+	public void handleInprogressButtonAction(ActionEvent event) {
+		Window owner = inprogressButton.getScene().getWindow();
+		
+		int selectedIndex = assignedLog.getSelectionModel().getSelectedIndex();
+		
+		if(selectedIndex == -1) {
+			AlertHelper.showAlert(Alert.AlertType.ERROR, owner, "Form Error!", "Must select a story from assigned backlog.");
+			return;
+		}
+		
+		//find story by title
+		UserStory story = StoryFactory.getInstance().findByTitle(assignedLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+		
+		
+		
+		StoryFactory.getInstance().setSelectedStory(story);
+		StoryFactory.getInstance().setSelectedStorySprintStatus(2);
+	}
+	
+	public void handleNotInprogressButtonAction(ActionEvent event) {
+		Window owner = notInprogressButton.getScene().getWindow();
+		
+		int selectedIndex = inprogressLog.getSelectionModel().getSelectedIndex();
+		
+		if(selectedIndex == -1) {
+			AlertHelper.showAlert(Alert.AlertType.ERROR, owner, "Form Error!", "Must select a story from inprogress backlog.");
+			return;
+		}
+		
+		//find story by title
+		UserStory story = StoryFactory.getInstance().findByTitle(inprogressLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+		
+		StoryFactory.getInstance().setSelectedStory(story);
+		StoryFactory.getInstance().setSelectedStorySprintStatus(1);
+	}
+	
+	
 
 	//wrapper func for observable class to call
 	@Override
@@ -215,6 +296,9 @@ public class MainFormController implements Observer, Initializable{
 		ObservableList<String> backlog_titles = FXCollections.observableArrayList();
 		ObservableList<String> sprint_titles = FXCollections.observableArrayList();
 		ObservableList<String> finished_titles = FXCollections.observableArrayList();
+		ObservableList<String> waiting_titles = FXCollections.observableArrayList();
+		ObservableList<String> assigned_titles = FXCollections.observableArrayList();
+		ObservableList<String> inprogress_titles = FXCollections.observableArrayList();
 		
 		for(UserStory story : StoryFactory.getInstance().getProductBacklog()) {
 			backlog_titles.add(String.format("%s\n%s | %d points", story.getTitle(), story.getAuthor(), story.getScore()));
@@ -222,15 +306,33 @@ public class MainFormController implements Observer, Initializable{
 		
 		for(UserStory story : StoryFactory.getInstance().getSprintBacklog()) {
 			sprint_titles.add(String.format("%s\n%s | %d points", story.getTitle(), story.getAuthor(), story.getScore()));
+			
+			if(story.getSprintStatus() == 0){
+				waiting_titles.add(String.format("%s\n%s | %d points", story.getTitle(), story.getAuthor(), story.getScore()));
+			}
+			
+			if(story.getSprintStatus() == 1){
+				assigned_titles.add(String.format("%s\n%s | %d points", story.getTitle(), story.getAuthor(), story.getScore()));
+			}
+			
+			if(story.getSprintStatus() == 2){
+				inprogress_titles.add(String.format("%s\n%s | %d points", story.getTitle(), story.getAuthor(), story.getScore()));
+			}
+			
 		}
 		
 		for(UserStory story : StoryFactory.getInstance().getcompletedLog()) {
 			finished_titles.add(String.format("%s\n%s | %d points\nCompleted: Day %d", story.getTitle(), story.getAuthor(), story.getScore(), story.getFinishDate()));
 		}
 		
+		
+		
 		productBacklog.setItems(backlog_titles);
 		SprintBacklog.setItems(sprint_titles);
 		completionLog.setItems(finished_titles);
+		waitingLog.setItems(waiting_titles);
+		assignedLog.setItems(assigned_titles);
+		inprogressLog.setItems(inprogress_titles);
 				
 		updateGraph();
 	}

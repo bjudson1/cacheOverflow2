@@ -69,8 +69,9 @@ public class StoryFactory extends Observable implements Serializable{
 	}
 	
 	public void addStory(String title, String author, String description, int points) {
-		productBacklog.add(new UserStory(title, author, description, points));
+		UserStory story = new UserStory(title, author, description, points);
 		
+		productBacklog.add(story);
 		setChanged();
 		notifyObservers();
 	}
@@ -178,5 +179,37 @@ public class StoryFactory extends Observable implements Serializable{
 		
 		setChanged();
 		notifyObservers();
+	}
+	
+	public void setSelectedStorySprintStatus(int status) {
+		selectedStory.setSprintStatus(status);
+		
+		setChanged();
+		notifyObservers();
+	}
+	
+	//returns 1st user story with matching title
+	public UserStory findByTitle(String title) {
+		for(UserStory story : productBacklog) {
+			if(story.getTitle().equals(title)) {
+				return story;
+			}
+		}
+		
+		for(UserStory story : sprintBackLog) {
+			if(story.getTitle().equals(title)){
+				return story;
+			}
+				
+		}
+		
+		for(UserStory story : completed) {
+			if(story.getTitle().equals(title)) {
+				return story;
+			}
+		}
+		
+		return null;
+		
 	}
 }

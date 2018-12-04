@@ -11,6 +11,7 @@ public class UserStory implements Serializable{
 	int points;
 	List<String> comments;
 	int finishDate;
+	int sprintStatus;
 
 	private static final long serialVersionUID = 1L;
 
@@ -22,6 +23,7 @@ public class UserStory implements Serializable{
 		points = pointsIn;
 		comments = new ArrayList<String>();
 		finishDate = 0;
+		sprintStatus = 0;
 	}
 
 	public void addComment(String comment) {
@@ -46,5 +48,13 @@ public class UserStory implements Serializable{
 	
 	public void setFinishDate(int dateIn) {
 		finishDate = dateIn;
+	}
+	
+	public int getSprintStatus() {
+		return sprintStatus;
+	}
+	
+	public void setSprintStatus(int statusIn) {
+		sprintStatus = statusIn;
 	}
 }
