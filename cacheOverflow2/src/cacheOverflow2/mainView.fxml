@@ -15,7 +15,6 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Button?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cacheOverflow2.MainFormController">
    <children>
       <Pane layoutX="14.0" layoutY="12.0" prefHeight="107.0" prefWidth="562.0">
@@ -28,8 +27,8 @@
       </Pane>
       <Pane layoutX="6.0" layoutY="125.0" prefHeight="271.0" prefWidth="373.0">
          <children>
-            <ListView layoutX="25.0" layoutY="39.0" prefHeight="199.0" prefWidth="138.0" />
-            <ListView layoutX="214.0" layoutY="38.0" prefHeight="199.0" prefWidth="138.0" />
+            <ListView fx:id="productBacklog" layoutX="25.0" layoutY="39.0" prefHeight="199.0" prefWidth="138.0" />
+            <ListView fx:id="SprintBacklog" layoutX="214.0" layoutY="38.0" prefHeight="199.0" prefWidth="138.0" />
             <Label layoutX="42.0" layoutY="18.0" text="Product Backlog" />
             <Label layoutX="233.0" layoutY="18.0" text="Sprint Backlog" />
          </children>
