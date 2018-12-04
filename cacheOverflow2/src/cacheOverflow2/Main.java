@@ -5,11 +5,11 @@ public class Main {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
-		//UI ui = new UI();
-		UI.run(args);
+		UI ui = new UI();
+		ui.run(args);
 		
-		Server server = new Server();
-		server.initialize();
+		//Server server = new Server();
+		//server.initialize();
 	}
 
 }
