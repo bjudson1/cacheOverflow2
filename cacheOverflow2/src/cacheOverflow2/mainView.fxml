@@ -15,31 +15,63 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Button?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cacheOverflow2.MainFormController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cacheOverflow2.MainFormController">
    <children>
-      <Pane layoutX="14.0" layoutY="12.0" prefHeight="107.0" prefWidth="562.0">
-         <children>
-            <Button fx:id="addButton" layoutX="50.0" layoutY="43.0" mnemonicParsing="false" onAction="#handleAddButtonAction" text="Add" />
-            <Button fx:id="sprintButton" layoutX="183.0" layoutY="43.0" mnemonicParsing="false" onAction="#handleSprintButtonAction" text="Sprint" />
-            <Button fx:id="finishButton" layoutX="319.0" layoutY="42.0" mnemonicParsing="false" onAction="#handleFinishButtonAction" text="Finish" />
-            <Button fx:id="removeButton" layoutX="453.0" layoutY="42.0" mnemonicParsing="false" onAction="#handleRemoveButtonAction" text="Remove" />
-         </children>
-      </Pane>
-      <Pane layoutX="6.0" layoutY="125.0" prefHeight="271.0" prefWidth="373.0">
-         <children>
-            <ListView fx:id="productBacklog" layoutX="25.0" layoutY="39.0" prefHeight="199.0" prefWidth="138.0" />
-            <ListView fx:id="SprintBacklog" layoutX="214.0" layoutY="38.0" prefHeight="199.0" prefWidth="138.0" />
-            <Label layoutX="42.0" layoutY="18.0" text="Product Backlog" />
-            <Label layoutX="233.0" layoutY="18.0" text="Sprint Backlog" />
-         </children>
-      </Pane>
-      <LineChart layoutX="357.0" layoutY="144.0" prefHeight="234.0" prefWidth="233.0">
-        <xAxis>
-          <CategoryAxis side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis side="LEFT" />
-        </yAxis>
-      </LineChart>
+      <TabPane prefHeight="500.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Overview">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="800.0">
+                     <children>
+                        <Pane prefHeight="107.0" prefWidth="562.0">
+                           <children>
+                              <Button fx:id="addButton" layoutX="50.0" layoutY="43.0" mnemonicParsing="false" onAction="#handleAddButtonAction" text="Add" />
+                              <Button fx:id="sprintButton" layoutX="183.0" layoutY="43.0" mnemonicParsing="false" onAction="#handleSprintButtonAction" text="Sprint" />
+                              <Button fx:id="finishButton" layoutX="319.0" layoutY="42.0" mnemonicParsing="false" onAction="#handleFinishButtonAction" text="Finish" />
+                              <Button fx:id="removeButton" layoutX="453.0" layoutY="42.0" mnemonicParsing="false" onAction="#handleRemoveButtonAction" text="Remove" />
+                              <Label layoutX="407.0" layoutY="84.0" text="Completion Log" />
+                           </children>
+                        </Pane>
+                        <Pane layoutX="7.0" layoutY="74.0" prefHeight="271.0" prefWidth="373.0">
+                           <children>
+                              <ListView fx:id="productBacklog" layoutX="25.0" layoutY="39.0" prefHeight="199.0" prefWidth="138.0" />
+                              <ListView fx:id="SprintBacklog" layoutX="214.0" layoutY="38.0" prefHeight="199.0" prefWidth="138.0" />
+                              <Label layoutX="42.0" layoutY="18.0" text="Product Backlog" />
+                              <Label layoutX="233.0" layoutY="18.0" text="Sprint Backlog" />
+                           </children>
+                        </Pane>
+                        <ListView fx:id="SprintBacklog1" layoutX="398.0" layoutY="111.0" prefHeight="199.0" prefWidth="138.0" />
+                        <LineChart layoutX="550.0" layoutY="123.0" prefHeight="234.0" prefWidth="233.0">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </LineChart>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="SCRUM Board">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView layoutX="57.0" layoutY="149.0" prefHeight="266.0" prefWidth="200.0" />
+                        <ListView layoutX="305.0" layoutY="145.0" prefHeight="268.0" prefWidth="200.0" />
+                        <ListView layoutX="553.0" layoutY="141.0" prefHeight="268.0" prefWidth="200.0" />
+                        <Pane layoutX="40.0" layoutY="48.0" prefHeight="400.0" prefWidth="700.0">
+                           <children>
+                              <Label layoutX="316.0" layoutY="54.0" prefHeight="11.0" prefWidth="79.0" text="Assigned" />
+                              <Label layoutX="561.0" layoutY="55.0" prefHeight="17.0" prefWidth="79.0" text="In-Progress" />
+                              <Label layoutX="78.0" layoutY="63.0" prefHeight="17.0" prefWidth="79.0" text="Waiting" />
+                           </children>
+                        </Pane>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
    </children>
 </AnchorPane>

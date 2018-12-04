@@ -24,4 +24,12 @@ public class detailedViewController {
 		Stage stage = (Stage) cancelButton.getScene().getWindow();
 		stage.close();
 	}
+	
+	public void handleAddComment(ActionEvent event) {
+	
+	}
+	
+	public void handleRemoveComment(ActionEvent event) {
+		
+	}
 }
