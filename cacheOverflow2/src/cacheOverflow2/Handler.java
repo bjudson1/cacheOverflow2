@@ -6,39 +6,38 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Handler implements Runnable{
+public class Handler implements Runnable {
 	final static int COMMAND1 = 0;
-	
+
 	private Socket socket;
-	
+
 	public Handler(Socket socketIn) {
 		socket = socketIn;
 		run();
 	}
-	
+
 	public void run() {
 		try {
 			BufferedReader clientInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			PrintWriter clientOutput = new PrintWriter(socket.getOutputStream());
-			
-			while(true) {
+
+			while (true) {
 				int request = Integer.parseInt(clientInput.readLine());
-			
-				switch(request) {
-					case COMMAND1: {
-						System.out.println("Command 1");
-					}
+
+				switch (request) {
+				case COMMAND1: {
+					System.out.println("Command 1");
+				}
 				}
 			}
 		}
-		
-		catch(IOException ex){
+
+		catch (IOException ex) {
 			System.err.println(ex);
 		}
 		try {
 			socket.close();
-		}
-		catch(IOException e){
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

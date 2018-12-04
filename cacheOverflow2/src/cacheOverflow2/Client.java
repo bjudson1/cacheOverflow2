@@ -10,45 +10,42 @@ public class Client {
 	private PrintWriter output;
 	private BufferedReader input;
 	private Socket clientSocket;
-	
-	public Client(String ip,int port){ 
-		connect(ip,port);
+
+	public Client(String ip, int port) {
+		connect(ip, port);
 	}
-	
-	public void connect(String ip,int port) {
-		try{
-			clientSocket = new Socket(ip,port);
+
+	public void connect(String ip, int port) {
+		try {
+			clientSocket = new Socket(ip, port);
 			input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			output = new PrintWriter(clientSocket.getOutputStream(),true);			
-		}
-		catch(IOException e) {
+			output = new PrintWriter(clientSocket.getOutputStream(), true);
+		} catch (IOException e) {
 			System.err.println(e);
 		}
 	}
-	
+
 	public void disconnect() {
-		try{
+		try {
 			input.close();
 			output.close();
 			clientSocket.close();
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			System.err.println(e);
 		}
 	}
-	
+
 	public String sendAndRecieve(String message) {
 		output.println(message);
-		
+
 		String response = "";
-		try{
+		try {
 			response = input.readLine();
-		}
-		catch(IOException e) {
+		} catch (IOException e) {
 			System.err.println(e);
 		}
-		
+
 		return response;
 	}
-	
+
 }
