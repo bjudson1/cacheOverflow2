@@ -45,7 +45,7 @@
                                   <NumberAxis label="Days" side="BOTTOM" upperBound="25.0" fx:id="xAxis" />
                                 </xAxis>
                                 <yAxis>
-                                  <NumberAxis fx:id="yAxis" pickOnBounds="false" side="LEFT" upperBound="75.0" />
+                                  <NumberAxis fx:id="yAxis" label="\% Done" pickOnBounds="false" side="LEFT" upperBound="75.0" />
                                 </yAxis>
                               </LineChart>
                               <ListView fx:id="completionLog" layoutX="26.0" layoutY="32.0" prefHeight="156.0" prefWidth="245.0" />
