@@ -1,0 +1,10 @@
+1) Factory. We want a story factory class that is responsible for managing 
+all user stories. 
+
+
+2) Singleton. We want there to be only one story factory and we want multiple
+other classes to access it.
+	
+2) Observer. We will also make the story factory observable so when the logs 
+changes the UI is updated.
+
