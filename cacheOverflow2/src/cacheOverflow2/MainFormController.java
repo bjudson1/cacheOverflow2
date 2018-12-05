@@ -420,28 +420,28 @@ public class MainFormController implements Observer, Initializable{
 		ObservableList<String> inprogress_titles = FXCollections.observableArrayList();
 		
 		for(UserStory story : StoryFactory.getInstance().getProductBacklog()) {
-			backlog_titles.add(String.format("%s\n%s | %d points", story.getTitle(), story.getAuthor(), story.getScore()));
+			backlog_titles.add(String.format("%s\nAuthor: %s\n%d points", story.getTitle(), story.getAuthor(), story.getScore()));
 		}
 		
 		for(UserStory story : StoryFactory.getInstance().getSprintBacklog()) {
-			sprint_titles.add(String.format("%s\n%s | %d points", story.getTitle(), story.getAuthor(), story.getScore()));
+			sprint_titles.add(String.format("%s\nAuthor: %s\nAssignee: \n%d points", story.getTitle(), story.getAuthor(), story.getScore()));
 			
 			if(story.getSprintStatus() == 0){
-				waiting_titles.add(String.format("%s\n%s | %d points", story.getTitle(), story.getAuthor(), story.getScore()));
+				waiting_titles.add(String.format("%s\nAuthor: %s\nAssignee: \n%d points", story.getTitle(), story.getAuthor(), story.getScore()));
 			}
 			
 			if(story.getSprintStatus() == 1){
-				assigned_titles.add(String.format("%s\n%s | %d points", story.getTitle(), story.getAuthor(), story.getScore()));
+				assigned_titles.add(String.format("%s\nAuthor: %s\nAssignee: \n%d points", story.getTitle(), story.getAuthor(), story.getScore()));
 			}
 			
 			if(story.getSprintStatus() == 2){
-				inprogress_titles.add(String.format("%s\n%s | %d points", story.getTitle(), story.getAuthor(), story.getScore()));
+				inprogress_titles.add(String.format("%s\nAuthor: %s\nAssignee: \n%d points", story.getTitle(), story.getAuthor(), story.getScore()));
 			}
 			
 		}
 		
 		for(UserStory story : StoryFactory.getInstance().getcompletedLog()) {
-			finished_titles.add(String.format("%s\n%s | %d points\nCompleted: Day %d", story.getTitle(), story.getAuthor(), story.getScore(), story.getFinishDate()));
+			finished_titles.add(String.format("%s\nAuthor: %s\nAssignee: \n%d points\nCompleted: Day %d", story.getTitle(), story.getAuthor(), story.getScore(), story.getFinishDate()));
 		}
 		
 		productBacklog.setItems(backlog_titles);
