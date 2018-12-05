@@ -93,7 +93,9 @@ public class StoryFactory extends Observable implements Serializable{
 	}
 	
 	public void sprintStory(int index) {
-		sprintBackLog.add(productBacklog.get(index));
+		UserStory story = productBacklog.get(index);
+		story.setSprintStatus(0);
+		sprintBackLog.add(story);
 		productBacklog.remove(index);
 		
 		setChanged();
@@ -109,7 +111,9 @@ public class StoryFactory extends Observable implements Serializable{
 	}
 	
 	public void unfinishStory(int index) {
-		sprintBackLog.add(completed.get(index));
+		UserStory story = completed.get(index);
+		story.setSprintStatus(0);
+		sprintBackLog.add(story);
 		completed.remove(index);
 		
 		setChanged();
@@ -188,6 +192,33 @@ public class StoryFactory extends Observable implements Serializable{
 		notifyObservers();
 	}
 	
+	public void addCommentToSelected(String comment) {
+		selectedStory.addComment(comment);
+		
+		setChanged();
+		notifyObservers();
+	}
+	
+	public void removeCommentFromSelected(String comment) {
+		selectedStory.removeComment(comment);
+		
+		setChanged();
+		notifyObservers();
+	}
+	
+	public void detailUpdate(String title, String author, String description, int score) {
+		System.out.println(title);
+		
+		
+		selectedStory.setTitle(title);
+		selectedStory.setAuthor(author);
+		selectedStory.setDescription(description);
+		selectedStory.setScore(score);
+		
+		setChanged();
+		notifyObservers();
+	}
+	
 	//returns 1st user story with matching title
 	public UserStory findByTitle(String title) {
 		for(UserStory story : productBacklog) {
@@ -210,6 +241,5 @@ public class StoryFactory extends Observable implements Serializable{
 		}
 		
 		return null;
-		
 	}
 }

@@ -41,6 +41,9 @@ public class MainFormController implements Observer, Initializable{
 
 	@FXML
 	private Button finishButton;
+
+	@FXML
+	private Button finishButton2;
 	
 	@FXML
 	private Button unfinishButton;
@@ -59,6 +62,9 @@ public class MainFormController implements Observer, Initializable{
 	
 	@FXML
 	private Button notInprogressButton;
+	
+	@FXML
+	private Button detailsButton;
 	
 	@FXML
 	private ListView<String> productBacklog;
@@ -85,12 +91,21 @@ public class MainFormController implements Observer, Initializable{
 	//add as observer to factory
 	public MainFormController() throws ClassNotFoundException {		
 		//load state from disk
-		StoryFactory.getInstance().loadState();
-		StoryFactory.getInstance().addObserver(this);
+		//StoryFactory.getInstance().loadState();
+		//StoryFactory.getInstance().addObserver(this);
 	}
 	
 	@FXML
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		//load state from disk
+		try {
+			StoryFactory.getInstance().loadState();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		StoryFactory.getInstance().addObserver(this);
+				
 		//update ui to load state
 		updateUI();
     }
@@ -158,7 +173,7 @@ public class MainFormController implements Observer, Initializable{
 			Stage stage = new Stage();
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.initStyle(StageStyle.UNDECORATED);
-			stage.setTitle("Add User Story");
+			stage.setTitle("Finish Date Entry");
 			stage.setScene(new Scene(root1));
 			stage.show();
 		} catch (IOException e) {
@@ -166,6 +181,38 @@ public class MainFormController implements Observer, Initializable{
 		}
 
 		StoryFactory.getInstance().finishStory(selectedIndex);
+	}
+	
+	@FXML
+	protected void handleFinishButton2Action(ActionEvent event) {
+		Window owner = finishButton2.getScene().getWindow();
+		int selectedIndex = inprogressLog.getSelectionModel().getSelectedIndex();
+		
+		if(selectedIndex == -1) {
+			AlertHelper.showAlert(Alert.AlertType.ERROR, owner, "Form Error!", "Must select a story from the inprogress backlog.");
+			return;
+		}
+		
+		//find story by title
+		UserStory story = StoryFactory.getInstance().findByTitle(inprogressLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+		
+		//set selected story
+		StoryFactory.getInstance().setSelectedStory(story);
+		
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("dateEntryForm.fxml"));
+			Parent root1 = (Parent) fxmlLoader.load();
+			Stage stage = new Stage();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.initStyle(StageStyle.UNDECORATED);
+			stage.setTitle("Finish Date Entry");
+			stage.setScene(new Scene(root1));
+			stage.show();
+		} catch (IOException e) {
+			System.err.print(e);
+		}
+
+		StoryFactory.getInstance().finishStory(story);
 	}
 	
 	@FXML
@@ -213,6 +260,7 @@ public class MainFormController implements Observer, Initializable{
 		StoryFactory.getInstance().removeStory(selectedStory,correspondingLog);		
 	}
 	
+	@FXML
 	public void handleAssignButtonAction(ActionEvent event) {
 		Window owner = assignButton.getScene().getWindow();
 		
@@ -230,6 +278,7 @@ public class MainFormController implements Observer, Initializable{
 		StoryFactory.getInstance().setSelectedStorySprintStatus(1);
 	}
 	
+	@FXML
 	public void handleUnassignButtonAction(ActionEvent event) {
 		Window owner = unassignButton.getScene().getWindow();
 		
@@ -247,6 +296,7 @@ public class MainFormController implements Observer, Initializable{
 		StoryFactory.getInstance().setSelectedStorySprintStatus(0);
 	}
 	
+	@FXML
 	public void handleInprogressButtonAction(ActionEvent event) {
 		Window owner = inprogressButton.getScene().getWindow();
 		
@@ -266,6 +316,7 @@ public class MainFormController implements Observer, Initializable{
 		StoryFactory.getInstance().setSelectedStorySprintStatus(2);
 	}
 	
+	@FXML
 	public void handleNotInprogressButtonAction(ActionEvent event) {
 		Window owner = notInprogressButton.getScene().getWindow();
 		
@@ -282,6 +333,74 @@ public class MainFormController implements Observer, Initializable{
 		StoryFactory.getInstance().setSelectedStory(story);
 		StoryFactory.getInstance().setSelectedStorySprintStatus(1);
 	}
+	
+	@FXML
+	public void handleDetailsButtonAction(ActionEvent event) {
+		Window owner = detailsButton.getScene().getWindow();
+		
+		int selectedIndex = productBacklog.getSelectionModel().getSelectedIndex();
+		UserStory story;
+		String title;
+				
+		if(selectedIndex == -1) {
+			selectedIndex = SprintBacklog.getSelectionModel().getSelectedIndex();
+			
+			if(selectedIndex == -1) {
+				selectedIndex = completionLog.getSelectionModel().getSelectedIndex();
+				
+				if(selectedIndex == -1) {
+					selectedIndex = waitingLog.getSelectionModel().getSelectedIndex();
+					
+					if(selectedIndex == -1) {
+						selectedIndex = assignedLog.getSelectionModel().getSelectedIndex();
+						
+						if(selectedIndex == -1) {
+							selectedIndex = inprogressLog.getSelectionModel().getSelectedIndex();
+							
+							if(selectedIndex == -1) {
+								AlertHelper.showAlert(Alert.AlertType.ERROR, owner, "Form Error!", "Must select a story from a backlog.");
+								return;
+							}
+							else {
+								story = StoryFactory.getInstance().findByTitle(inprogressLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+							}
+						}
+						else {
+							story = StoryFactory.getInstance().findByTitle(assignedLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+						}
+					}
+					else {
+						story = StoryFactory.getInstance().findByTitle(waitingLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+					}
+				}
+				else {
+					story = StoryFactory.getInstance().findByTitle(completionLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+				}
+			}
+			else {
+				story = StoryFactory.getInstance().findByTitle(SprintBacklog.getSelectionModel().getSelectedItem().split("\n")[0]);
+			}
+		}
+		else {
+			story = StoryFactory.getInstance().findByTitle(productBacklog.getSelectionModel().getSelectedItem().split("\n")[0]);			
+		}
+		
+		StoryFactory.getInstance().setSelectedStory(story);
+				
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("detailedView.fxml"));
+			Parent root1 = (Parent) fxmlLoader.load();
+			Stage stage = new Stage();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.initStyle(StageStyle.UNDECORATED);
+			stage.setTitle("Detailed View");
+			stage.setScene(new Scene(root1));
+			stage.show();
+		} catch (IOException e) {
+			System.err.print(e);
+		}
+	}
+	
 	
 	
 
@@ -324,8 +443,6 @@ public class MainFormController implements Observer, Initializable{
 		for(UserStory story : StoryFactory.getInstance().getcompletedLog()) {
 			finished_titles.add(String.format("%s\n%s | %d points\nCompleted: Day %d", story.getTitle(), story.getAuthor(), story.getScore(), story.getFinishDate()));
 		}
-		
-		
 		
 		productBacklog.setItems(backlog_titles);
 		SprintBacklog.setItems(sprint_titles);

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Button?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cacheOverflow2.addCommentFormController">
+   <children>
+      <Pane prefHeight="250.0" prefWidth="400.0">
+         <children>
+            <Label layoutX="14.0" layoutY="14.0" text="Comment" />
+            <TextArea fx:id="comment" layoutX="14.0" layoutY="31.0" prefHeight="172.0" prefWidth="375.0" />
+            <Button fx:id="saveButton" layoutX="137.0" layoutY="209.0" mnemonicParsing="false" onAction="#handleSaveButtonAction" text="Save" />
+            <Button fx:id="cancelButton" layoutX="211.0" layoutY="209.0" mnemonicParsing="false" onAction="#handleCancelButtonAction" text="Cancel" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
