@@ -5,8 +5,6 @@ import java.net.URL;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -93,7 +91,6 @@ public class detailedViewController implements Observer, Initializable{
 		Window owner = removeComment.getScene().getWindow();
 
 		String comment = commentLog.getSelectionModel().getSelectedItem();
-		System.out.println(comment);
 
 		if(comment == null) {
 			AlertHelper.showAlert(Alert.AlertType.ERROR, owner, "Form Error!", "Must select a comment to remove.");
@@ -106,7 +103,6 @@ public class detailedViewController implements Observer, Initializable{
 	//wrapper function for observable class
 	public void update(java.util.Observable o, Object arg) {
 		updateUI(StoryFactory.getInstance().getSelectedStory());
-		System.out.println("hii");
 	}
 	
 	public void updateUI(UserStory story) {

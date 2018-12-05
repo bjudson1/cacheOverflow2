@@ -11,6 +11,7 @@ public class UserStory implements Serializable{
 	String title;
 	String author;
 	String description;
+	String assignee;
 	int points;
 	List<String> comments;
 	int finishDate;
@@ -27,6 +28,7 @@ public class UserStory implements Serializable{
 		comments = new ArrayList<String>();
 		finishDate = 0;
 		sprintStatus = 0;
+		assignee = "None";
 	}
 
 	public void addComment(String comment) {
@@ -84,6 +86,15 @@ public class UserStory implements Serializable{
 	public void setSprintStatus(int statusIn) {
 		sprintStatus = statusIn;
 	}
+	
+	public String getAssignee() {
+		return assignee;
+	}
+	
+	public void setAssignee(String assigneeIn) {
+		assignee = assigneeIn;
+	}
+	
 	
 	public ObservableList<String> getComments(){
 		return FXCollections.observableArrayList(comments);

@@ -124,8 +124,8 @@ public class StoryFactory extends Observable implements Serializable{
 		completed.add(sprintBackLog.get(index));
 		sprintBackLog.remove(index);
 		
-		setChanged();
-		notifyObservers();
+		//setChanged();
+		//notifyObservers();
 	}
 	
 	
@@ -206,10 +206,7 @@ public class StoryFactory extends Observable implements Serializable{
 		notifyObservers();
 	}
 	
-	public void detailUpdate(String title, String author, String description, int score) {
-		System.out.println(title);
-		
-		
+	public void detailUpdate(String title, String author, String description, int score) {		
 		selectedStory.setTitle(title);
 		selectedStory.setAuthor(author);
 		selectedStory.setDescription(description);
@@ -241,5 +238,12 @@ public class StoryFactory extends Observable implements Serializable{
 		}
 		
 		return null;
+	}
+	
+	public void setSelectedStoryAssignee(String assignee) {
+		selectedStory.setAssignee(assignee);
+		
+		setChanged();
+		notifyObservers();
 	}
 }

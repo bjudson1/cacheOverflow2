@@ -2,13 +2,11 @@ package cacheOverflow2;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
-
-import javax.annotation.Resources;
+import java.util.TreeMap;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,15 +17,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
-import javafx.util.Pair;
 
 public class MainFormController implements Observer, Initializable{
 	@FXML
@@ -67,33 +67,31 @@ public class MainFormController implements Observer, Initializable{
 	private Button detailsButton;
 	
 	@FXML
-	private ListView<String> productBacklog;
+	private ListView<Label> productBacklog;
 	
 	@FXML
-	private ListView<String> SprintBacklog;
+	private ListView<Label> SprintBacklog;
 	
 	@FXML
-	private ListView<String> completionLog;
+	private ListView<Label> completionLog;
 	
 	@FXML
-	private ListView<String> waitingLog;
+	private ListView<Label> waitingLog;
 	
 	@FXML
-	private ListView<String> assignedLog;
+	private ListView<Label> assignedLog;
 	
 	@FXML
-	private ListView<String> inprogressLog;
+	private ListView<Label> inprogressLog;
 	
 	@FXML
 	private LineChart<Integer, Integer> burnDown;
 	
+	@FXML
+	private NumberAxis xAxis;
 	
-	//add as observer to factory
-	public MainFormController() throws ClassNotFoundException {		
-		//load state from disk
-		//StoryFactory.getInstance().loadState();
-		//StoryFactory.getInstance().addObserver(this);
-	}
+	@FXML
+	private NumberAxis yAxis;
 	
 	@FXML
 	public void initialize(URL location, ResourceBundle resources) {
@@ -108,6 +106,11 @@ public class MainFormController implements Observer, Initializable{
 				
 		//update ui to load state
 		updateUI();
+		
+		xAxis.setUpperBound(30);
+		yAxis.setUpperBound(100);
+		xAxis.setAutoRanging(false);
+		yAxis.setAutoRanging(false);
     }
 
 	@FXML
@@ -151,7 +154,8 @@ public class MainFormController implements Observer, Initializable{
 			return;
 		}
 				
-		StoryFactory.getInstance().unsprintStory(selectedStory);
+		StoryFactory.getInstance().unsprintStory(selectedStory);		
+		StoryFactory.getInstance().setSelectedStoryAssignee("None");
 	}
 
 	@FXML
@@ -194,8 +198,7 @@ public class MainFormController implements Observer, Initializable{
 		}
 		
 		//find story by title
-		UserStory story = StoryFactory.getInstance().findByTitle(inprogressLog.getSelectionModel().getSelectedItem().split("\n")[0]);
-		
+		UserStory story = StoryFactory.getInstance().findByTitle(inprogressLog.getSelectionModel().getSelectedItem().getText().split("\n")[0]);
 		//set selected story
 		StoryFactory.getInstance().setSelectedStory(story);
 		
@@ -253,8 +256,6 @@ public class MainFormController implements Observer, Initializable{
 					return;
 				}
 			}
-			
-			
 		}
 		
 		StoryFactory.getInstance().removeStory(selectedStory,correspondingLog);		
@@ -272,9 +273,24 @@ public class MainFormController implements Observer, Initializable{
 		}
 		
 		//find story by title
-		UserStory story = StoryFactory.getInstance().findByTitle(waitingLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+		UserStory story = StoryFactory.getInstance().findByTitle(waitingLog.getSelectionModel().getSelectedItem().getText().split("\n")[0]);
 
 		StoryFactory.getInstance().setSelectedStory(story);
+		
+		
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("assigneeEntryForm.fxml"));
+			Parent root1 = (Parent) fxmlLoader.load();
+			Stage stage = new Stage();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.initStyle(StageStyle.UNDECORATED);
+			stage.setTitle("Assignee Entry Form");
+			stage.setScene(new Scene(root1));
+			stage.show();
+		} catch (IOException e) {
+			System.err.print(e);
+		}
+		
 		StoryFactory.getInstance().setSelectedStorySprintStatus(1);
 	}
 	
@@ -290,10 +306,11 @@ public class MainFormController implements Observer, Initializable{
 		}
 		
 		//find story by title
-		UserStory story = StoryFactory.getInstance().findByTitle(assignedLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+		UserStory story = StoryFactory.getInstance().findByTitle(assignedLog.getSelectionModel().getSelectedItem().getText().split("\n")[0]);
 		
 		StoryFactory.getInstance().setSelectedStory(story);
 		StoryFactory.getInstance().setSelectedStorySprintStatus(0);
+		StoryFactory.getInstance().setSelectedStoryAssignee("None");
 	}
 	
 	@FXML
@@ -308,9 +325,7 @@ public class MainFormController implements Observer, Initializable{
 		}
 		
 		//find story by title
-		UserStory story = StoryFactory.getInstance().findByTitle(assignedLog.getSelectionModel().getSelectedItem().split("\n")[0]);
-		
-		
+		UserStory story = StoryFactory.getInstance().findByTitle(assignedLog.getSelectionModel().getSelectedItem().getText().split("\n")[0]);
 		
 		StoryFactory.getInstance().setSelectedStory(story);
 		StoryFactory.getInstance().setSelectedStorySprintStatus(2);
@@ -328,7 +343,7 @@ public class MainFormController implements Observer, Initializable{
 		}
 		
 		//find story by title
-		UserStory story = StoryFactory.getInstance().findByTitle(inprogressLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+		UserStory story = StoryFactory.getInstance().findByTitle(inprogressLog.getSelectionModel().getSelectedItem().getText().split("\n")[0]);
 		
 		StoryFactory.getInstance().setSelectedStory(story);
 		StoryFactory.getInstance().setSelectedStorySprintStatus(1);
@@ -340,7 +355,6 @@ public class MainFormController implements Observer, Initializable{
 		
 		int selectedIndex = productBacklog.getSelectionModel().getSelectedIndex();
 		UserStory story;
-		String title;
 				
 		if(selectedIndex == -1) {
 			selectedIndex = SprintBacklog.getSelectionModel().getSelectedIndex();
@@ -362,27 +376,27 @@ public class MainFormController implements Observer, Initializable{
 								return;
 							}
 							else {
-								story = StoryFactory.getInstance().findByTitle(inprogressLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+								story = StoryFactory.getInstance().findByTitle(inprogressLog.getSelectionModel().getSelectedItem().getText().split("\n")[0]);
 							}
 						}
 						else {
-							story = StoryFactory.getInstance().findByTitle(assignedLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+							story = StoryFactory.getInstance().findByTitle(assignedLog.getSelectionModel().getSelectedItem().getText().split("\n")[0]);
 						}
 					}
 					else {
-						story = StoryFactory.getInstance().findByTitle(waitingLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+						story = StoryFactory.getInstance().findByTitle(waitingLog.getSelectionModel().getSelectedItem().getText().split("\n")[0]);
 					}
 				}
 				else {
-					story = StoryFactory.getInstance().findByTitle(completionLog.getSelectionModel().getSelectedItem().split("\n")[0]);
+					story = StoryFactory.getInstance().findByTitle(completionLog.getSelectionModel().getSelectedItem().getText().split("\n")[0]);
 				}
 			}
 			else {
-				story = StoryFactory.getInstance().findByTitle(SprintBacklog.getSelectionModel().getSelectedItem().split("\n")[0]);
+				story = StoryFactory.getInstance().findByTitle(SprintBacklog.getSelectionModel().getSelectedItem().getText().split("\n")[0]);
 			}
 		}
 		else {
-			story = StoryFactory.getInstance().findByTitle(productBacklog.getSelectionModel().getSelectedItem().split("\n")[0]);			
+			story = StoryFactory.getInstance().findByTitle(productBacklog.getSelectionModel().getSelectedItem().getText().split("\n")[0]);			
 		}
 		
 		StoryFactory.getInstance().setSelectedStory(story);
@@ -401,9 +415,6 @@ public class MainFormController implements Observer, Initializable{
 		}
 	}
 	
-	
-	
-
 	//wrapper func for observable class to call
 	@Override
 	public void update(Observable o, Object arg) {
@@ -412,52 +423,58 @@ public class MainFormController implements Observer, Initializable{
 	}
 	
 	public void updateUI() {
-		ObservableList<String> backlog_titles = FXCollections.observableArrayList();
-		ObservableList<String> sprint_titles = FXCollections.observableArrayList();
-		ObservableList<String> finished_titles = FXCollections.observableArrayList();
-		ObservableList<String> waiting_titles = FXCollections.observableArrayList();
-		ObservableList<String> assigned_titles = FXCollections.observableArrayList();
-		ObservableList<String> inprogress_titles = FXCollections.observableArrayList();
+		ObservableList<Label> backlog_titles = FXCollections.observableArrayList();
+		ObservableList<Label> sprint_titles = FXCollections.observableArrayList();
+		ObservableList<Label> finished_titles = FXCollections.observableArrayList();
+		ObservableList<Label> waiting_titles = FXCollections.observableArrayList();
+		ObservableList<Label> assigned_titles = FXCollections.observableArrayList();
+		ObservableList<Label> inprogress_titles = FXCollections.observableArrayList();
 		
 		for(UserStory story : StoryFactory.getInstance().getProductBacklog()) {
-			backlog_titles.add(String.format("%s\nAuthor: %s\n%d points", story.getTitle(), story.getAuthor(), story.getScore()));
+			String text = String.format("%s\nAuthor: %s\n%d points", story.getTitle(), story.getAuthor(), story.getScore());			
+			backlog_titles.add(makeLabel(text,story.getScore()));
 		}
 		
 		for(UserStory story : StoryFactory.getInstance().getSprintBacklog()) {
-			sprint_titles.add(String.format("%s\nAuthor: %s\nAssignee: \n%d points", story.getTitle(), story.getAuthor(), story.getScore()));
+			String text = String.format("%s\nAuthor: %s\nAssignee: %s\n%d points", story.getTitle(), story.getAuthor(), story.getAssignee(),  story.getScore());
+			sprint_titles.add(makeLabel(text,story.getScore()));
 			
 			if(story.getSprintStatus() == 0){
-				waiting_titles.add(String.format("%s\nAuthor: %s\nAssignee: \n%d points", story.getTitle(), story.getAuthor(), story.getScore()));
+				text = String.format("%s\nAuthor: %s\nAssignee: %s\n%d points", story.getTitle(), story.getAuthor(), story.getAssignee(),  story.getScore());
+				waiting_titles.add(makeLabel(text,story.getScore()));
 			}
 			
 			if(story.getSprintStatus() == 1){
-				assigned_titles.add(String.format("%s\nAuthor: %s\nAssignee: \n%d points", story.getTitle(), story.getAuthor(), story.getScore()));
+				text = String.format("%s\nAuthor: %s\nAssignee: %s\n%d points", story.getTitle(), story.getAuthor(), story.getAssignee(),  story.getScore());
+				assigned_titles.add(makeLabel(text,story.getScore()));
 			}
 			
 			if(story.getSprintStatus() == 2){
-				inprogress_titles.add(String.format("%s\nAuthor: %s\nAssignee: \n%d points", story.getTitle(), story.getAuthor(), story.getScore()));
+				text = String.format("%s\nAuthor: %s\nAssignee: %s\n%d points", story.getTitle(), story.getAuthor(),  story.getAssignee(), story.getScore());
+				inprogress_titles.add(makeLabel(text,story.getScore()));
 			}
-			
 		}
 		
+	
 		for(UserStory story : StoryFactory.getInstance().getcompletedLog()) {
-			finished_titles.add(String.format("%s\nAuthor: %s\nAssignee: \n%d points\nCompleted: Day %d", story.getTitle(), story.getAuthor(), story.getScore(), story.getFinishDate()));
+			String text = String.format("%s\nAuthor: %s\nAssignee: %s\n%d points\nCompleted: Day %d", story.getTitle(), story.getAuthor(), story.getAssignee(), story.getScore(), story.getFinishDate());			
+			finished_titles.add(makeLabel(text,story.getScore()));
 		}
-		
+				
 		productBacklog.setItems(backlog_titles);
 		SprintBacklog.setItems(sprint_titles);
 		completionLog.setItems(finished_titles);
 		waitingLog.setItems(waiting_titles);
 		assignedLog.setItems(assigned_titles);
 		inprogressLog.setItems(inprogress_titles);
-				
+		
 		updateGraph();
 	}
 	
 	public void updateGraph() {
 		int totalPoints = 0;
-		List<Pair<Integer, Integer>> finishInfo = new ArrayList<Pair<Integer, Integer>>();
-		//ObservableList<XYChart<X, Y>.Data<X, Y>> data = FXCollections.observableArrayList();
+		XYChart.Series<Integer,Integer> series = new XYChart.Series<Integer,Integer>();
+		TreeMap<Integer, Integer> sorted = new TreeMap<>();
 		
 		if(StoryFactory.getInstance().getProductBacklog() != null) {
 			for(UserStory story : StoryFactory.getInstance().getProductBacklog()) {
@@ -474,39 +491,39 @@ public class MainFormController implements Observer, Initializable{
 		if(StoryFactory.getInstance().getcompletedLog() != null) {
 			for(UserStory story : StoryFactory.getInstance().getcompletedLog()) {
 				totalPoints += story.getScore();
-				finishInfo.add(new Pair((Integer)story.getFinishDate(),(Integer)story.getScore()));
+				sorted.put((Integer)story.getFinishDate(), (Integer)story.getScore());
 			}
 		}
 		
-		//sort first
-		
-		XYChart.Series<Integer,Integer> series = new XYChart.Series<Integer,Integer>();
-		for(int i=0;i<30;i++) {
-			series.getData().add(new XYChart.Data<Integer, Integer>(i, i));
-			//System.out.println(new XYChart.Data<Integer, Integer>(i, i));
-			//data.add(new Pair<Integer,Integer>(i,totalPoints));
+		int currentPoints = totalPoints;
+		series.getData().add(new XYChart.Data<Integer, Integer>(0, 99));
+		for(Entry<Integer, Integer> entry : sorted.entrySet()) {
+			currentPoints -= entry.getValue();
+			int percentDone = (int)Math.round(((double)currentPoints/(double)totalPoints)*100);
+			series.getData().add(new XYChart.Data<Integer, Integer>(entry.getKey(), percentDone));			
 		}
 		
-		//System.out.println(series.getData());
-		//burnDown.getData().add(series.getData());
-		
-		/*int finishDate;
-		for(Pair<Integer, Integer> info : finishInfo) {
-			finishDate = info.getKey();
-			
-			for(int i=finishDate;i<30;i++) {
-				data.set(index, element)data.get(i) - info.getValue();
-			}
-			System.out.println(info);
-		}
-		
-		System.out.println("yooo");
-		
-		
-		
-		burnDown.setData(data);*/
+		burnDown.getData().clear();
+		burnDown.getData().add(series);	
 	}
 
+	public Label makeLabel(String text,int score) {
+		Label label = new Label(text);
+		
+		if(score <= 3) {
+			label.setTextFill(Color.GREEN);
+		}
+		
+		else if(score <= 6){
+			label.setTextFill(Color.ORANGE);
+		}
+		
+		else {
+			label.setTextFill(Color.RED);
+		}
+		
+		return label;
+	}
 	
 
 }
