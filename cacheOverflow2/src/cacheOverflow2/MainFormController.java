@@ -104,34 +104,17 @@ public class MainFormController implements Observer, Initializable{
 	private ObjectOutputStream outputToServer;
 		
 	private ObjectInputStream inputFromServer1;
-	
-	private ObjectInputStream inputFromServer2;
-	
-	private ArrayList<ArrayList<UserStory>> allLogs;
-	
+		
 	private class updateListener implements Runnable{		
 		public updateListener() {
 		}
 		
+		//this function runs and reads update from server
 		public void run() {
-			try {
-				inputFromServer2 = new ObjectInputStream(client_socket.getInputStream());
-			
-	   	 		while(true){
-				System.out.println("fff");
-				//inputFromServer.readObject();
-				
-					inputFromServer2.readObject();
-	   	 		}
-	   	 	} catch (ClassNotFoundException | IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-			}
-			
-		
-		        //recieve new state
+			while(true){
+				//recieve new state
 	   	 		//StoryFactory.getInstance().setAllLogs((ArrayList<ArrayList<UserStory>>) inputFromServer.readObject());
-	        
+			}		        
 		}
 	}
 
@@ -167,6 +150,9 @@ public class MainFormController implements Observer, Initializable{
 					//send state to server
 					outputToServer.writeObject(StoryFactory.getInstance().getAllLogs());
 					outputToServer.flush();
+					
+					inputFromServer1.readObject();
+
 				}
 				
 				//else get state from server

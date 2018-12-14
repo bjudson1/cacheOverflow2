@@ -7,13 +7,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import javafx.application.Platform;
-
 
 public class Server {
 	private ServerSocket serverSocket;
 	private int clientCount;
-	private String state_bytes;
 	private ArrayList<ArrayList<UserStory>> allLogs;
 	private ArrayList<Socket> clients;
 	
@@ -23,9 +20,7 @@ public class Server {
 		clients = new ArrayList<Socket>();
 	}
 
-	public void initialize() {
-		state_bytes = null;
-		
+	public void initialize() {		
 		new Thread(() -> {
 			try {
 				serverSocket = new ServerSocket(8000);
@@ -85,7 +80,7 @@ class Handler implements Runnable{
          while (true) {
 	        //if receive new state
 	        String input = (String) inputFromClient.readObject();
-
+	        System.out.println(input);
 	        //send state to client
 	        if(input.equals("get_state")) {	   	 
 	        	//there is no state loaded
@@ -96,6 +91,9 @@ class Handler implements Runnable{
 			           
 			        //get state from client
 			        server.setAllLogs((ArrayList<ArrayList<UserStory>>) inputFromClient.readObject());
+			        
+			        outputToClient.writeObject("done");
+			        outputToClient.flush();
 	        	}
 	        	
 	        	//else there is a state loaded to server
@@ -110,6 +108,8 @@ class Handler implements Runnable{
 		            //send state
 		        	outputToClient.writeObject(server.getAllLogs());
         		}
+	        	
+	        	System.out.println("done");
         	}
         	
 	        //update state from client
