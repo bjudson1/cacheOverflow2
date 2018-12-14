@@ -85,7 +85,9 @@ public class StoryFactory extends Observable implements Serializable{
 	}
 	
 	public void unsprintStory(int index) {
-		productBacklog.add(sprintBackLog.get(index));
+		UserStory story = sprintBackLog.get(index);
+		story.setSprintStatus(-1);
+		productBacklog.add(story);
 		sprintBackLog.remove(index);
 		
 		setChanged();
@@ -105,6 +107,7 @@ public class StoryFactory extends Observable implements Serializable{
 	public void finishStory(UserStory story) {
 		sprintBackLog.remove(story);
 		completed.add(story);
+		story.setSprintStatus(3);
 		
 		setChanged();
 		notifyObservers();
@@ -113,16 +116,21 @@ public class StoryFactory extends Observable implements Serializable{
 	public void unfinishStory(int index) {
 		UserStory story = completed.get(index);
 		story.setSprintStatus(0);
+		story.setFinishDate(-1);
 		sprintBackLog.add(story);
 		completed.remove(index);
+		story.setAssignee("None");
 		
 		setChanged();
 		notifyObservers();
 	}
 	
 	public void finishStory(int index) {
-		completed.add(sprintBackLog.get(index));
+		UserStory story = sprintBackLog.get(index);
+		story.setSprintStatus(3);
+		completed.add(story);
 		sprintBackLog.remove(index);
+
 		
 		//setChanged();
 		//notifyObservers();
@@ -242,6 +250,21 @@ public class StoryFactory extends Observable implements Serializable{
 	
 	public void setSelectedStoryAssignee(String assignee) {
 		selectedStory.setAssignee(assignee);
+		
+		setChanged();
+		notifyObservers();
+	}
+	
+	public ArrayList<ArrayList<UserStory>> getAllLogs() {
+		return allLogs;
+	}
+	
+	public void setAllLogs(ArrayList<ArrayList<UserStory>> allLogsIn) {
+		allLogs = allLogsIn;
+		
+		productBacklog = allLogs.get(0);
+		sprintBackLog = allLogs.get(1);
+		completed = allLogs.get(2);
 		
 		setChanged();
 		notifyObservers();

@@ -17,7 +17,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="284.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cacheOverflow2.dateEntryFormController">
    <children>
-      <Slider fx:id="dateSlider" layoutX="16.0" layoutY="172.0" majorTickUnit="3.0" max="30.0" onDragDetected="#updateDateLabel" prefHeight="16.0" prefWidth="370.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
+      <Slider fx:id="dateSlider" layoutX="16.0" layoutY="172.0" majorTickUnit="3.0" max="30.0" prefHeight="16.0" prefWidth="370.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
       <Label layoutX="65.0" layoutY="88.0" prefHeight="23.0" prefWidth="289.0" text="What day was it completed on?">
          <font>
             <Font size="18.0" />

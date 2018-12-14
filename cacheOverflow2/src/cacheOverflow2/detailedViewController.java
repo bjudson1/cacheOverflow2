@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
@@ -26,10 +27,7 @@ import javafx.fxml.Initializable;
 public class detailedViewController implements Observer, Initializable{
 	@FXML
 	private Button saveButton;
-	
-	@FXML
-	private Button cancelButton;
-	
+		
 	@FXML
 	private Button addComment;
 	
@@ -50,6 +48,15 @@ public class detailedViewController implements Observer, Initializable{
 	
 	@FXML
 	private ListView<String> commentLog;
+	
+	@FXML
+	private Label statusLabel;
+	
+	@FXML
+	private Label assigneeLabel;
+	
+	@FXML
+	private Label dateLabel;
 	
 	@FXML
 	public void initialize(URL location, ResourceBundle resources) {
@@ -111,6 +118,38 @@ public class detailedViewController implements Observer, Initializable{
 		descriptionField.setText(story.getDescription());
 		pointSlider.setValue((double)story.getScore());
 		commentLog.setItems(story.getComments());
+		
+		switch(story.getSprintStatus()){
+			case -1:
+				statusLabel.setText("None");
+			break;
+		
+			case 0:
+				statusLabel.setText("Waiting");
+			break;
+			
+			case 1:
+				statusLabel.setText("Assigned");
+			break;
+				
+			case 2:
+				statusLabel.setText("In-Progress");
+			break;
+			
+			case 3:
+				statusLabel.setText("Done");
+			break;
+		}
+		
+		assigneeLabel.setText(story.getAssignee());
+		
+		if(story.getFinishDate() == -1) {
+			dateLabel.setText("None");
+		}
+		
+		else {
+			dateLabel.setText(String.format("Day %d",story.getFinishDate()));
+		}
 	}
 }
 

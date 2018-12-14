@@ -20,13 +20,13 @@
       <Pane layoutX="30.0" layoutY="26.0" prefHeight="270.0" prefWidth="551.0">
          <children>
             <TextField fx:id="authorField" layoutX="48.0" layoutY="135.0" />
-            <TextField fx:id="descriptionField" layoutX="304.0" layoutY="58.0" prefHeight="198.0" prefWidth="238.0" />
             <Slider fx:id="pointSlider" layoutX="42.0" layoutY="218.0" majorTickUnit="1.0" max="10.0" minorTickCount="0" prefHeight="38.0" prefWidth="205.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" />
             <Label layoutX="48.0" layoutY="109.0" text="Author" />
             <Label layoutX="308.0" layoutY="34.0" text="Desctiption" />
             <Label layoutX="42.0" layoutY="189.0" text="Story Points" />
             <Label layoutX="48.0" layoutY="34.0" text="Story Title" />
             <TextField fx:id="titleField" layoutX="48.0" layoutY="60.0" />
+            <TextArea fx:id="descriptionField" layoutX="308.0" layoutY="74.0" prefHeight="192.0" prefWidth="242.0" />
          </children>
       </Pane>
       <Button fx:id="createButton" layoutX="222.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleCreateButton" text="Create" />

@@ -1,8 +1,12 @@
 package cacheOverflow2;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.net.URL;
 import java.util.Map.Entry;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
@@ -28,6 +32,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
+
+
 
 public class MainFormController implements Observer, Initializable{
 	@FXML
@@ -93,17 +99,101 @@ public class MainFormController implements Observer, Initializable{
 	@FXML
 	private NumberAxis yAxis;
 	
+	private Socket client_socket;
+	
+	private ObjectOutputStream outputToServer;
+		
+	private ObjectInputStream inputFromServer1;
+	
+	private ObjectInputStream inputFromServer2;
+	
+	private ArrayList<ArrayList<UserStory>> allLogs;
+	
+	private class updateListener implements Runnable{		
+		public updateListener() {
+		}
+		
+		public void run() {
+			try {
+				inputFromServer2 = new ObjectInputStream(client_socket.getInputStream());
+			
+	   	 		while(true){
+				System.out.println("fff");
+				//inputFromServer.readObject();
+				
+					inputFromServer2.readObject();
+	   	 		}
+	   	 	} catch (ClassNotFoundException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+			}
+			
+		
+		        //recieve new state
+	   	 		//StoryFactory.getInstance().setAllLogs((ArrayList<ArrayList<UserStory>>) inputFromServer.readObject());
+	        
+		}
+	}
+
 	@FXML
 	public void initialize(URL location, ResourceBundle resources) {
+		boolean connected = true; 
+		   
+		//connect to server
+	    try {
+	    	client_socket = new Socket("localhost", 8000);
+	    	outputToServer = new ObjectOutputStream(client_socket.getOutputStream());
+	    	inputFromServer1 = new ObjectInputStream(client_socket.getInputStream());
+	    	
+	    	System.out.println("Connected to server");
+	    }
+	    catch (IOException e) {
+	        System.out.println(e);
+	        connected = false;
+	    }
 		
-		//load state from disk
-		try {
-			StoryFactory.getInstance().loadState();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		StoryFactory.getInstance().addObserver(this);
+		if(connected) {
+			try {
+				outputToServer.writeObject("get_state");
+				outputToServer.flush();
 				
+				String input = (String) inputFromServer1.readObject();
+				
+				//server has no state
+				if(input.equals("none")) {
+			        //load state from disk
+					StoryFactory.getInstance().loadState();
+					
+					//send state to server
+					outputToServer.writeObject(StoryFactory.getInstance().getAllLogs());
+					outputToServer.flush();
+				}
+				
+				//else get state from server
+				else if(input.equals("ready?")){
+					outputToServer.writeObject("ready");
+					outputToServer.flush();
+					
+					//load from server
+					StoryFactory.getInstance().setAllLogs((ArrayList<ArrayList<UserStory>>) inputFromServer1.readObject());
+				}
+			} catch (IOException | ClassNotFoundException e) {
+				e.printStackTrace();	
+			}
+		}
+		
+		//no server
+		else {
+			//load state from disk
+			try {
+				StoryFactory.getInstance().loadState();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+
+		StoryFactory.getInstance().addObserver(this);
+
 		//update ui to load state
 		updateUI();
 		
@@ -111,6 +201,16 @@ public class MainFormController implements Observer, Initializable{
 		yAxis.setUpperBound(100);
 		xAxis.setAutoRanging(false);
 		yAxis.setAutoRanging(false);
+		
+		try {
+			inputFromServer1.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//start update listener
+		new Thread(new updateListener()).start();
     }
 
 	@FXML
@@ -153,9 +253,14 @@ public class MainFormController implements Observer, Initializable{
 			AlertHelper.showAlert(Alert.AlertType.ERROR, owner, "Form Error!", "Must select a story from the sprint backlog.");
 			return;
 		}
-				
+		
+		//find story by title
+		UserStory story = StoryFactory.getInstance().findByTitle(SprintBacklog.getSelectionModel().getSelectedItem().getText().split("\n")[0]);
+		
+		StoryFactory.getInstance().setSelectedStory(story);
 		StoryFactory.getInstance().unsprintStory(selectedStory);		
 		StoryFactory.getInstance().setSelectedStoryAssignee("None");
+		
 	}
 
 	@FXML
@@ -420,6 +525,21 @@ public class MainFormController implements Observer, Initializable{
 	public void update(Observable o, Object arg) {
 		updateUI();
 		StoryFactory.getInstance().saveState();
+		updateServer();
+	}
+	
+	public void updateServer() {
+		try {
+			outputToServer.writeObject("update");
+			outputToServer.flush();
+			
+			inputFromServer1.readObject();
+
+			outputToServer.writeObject(StoryFactory.getInstance().getAllLogs());
+			outputToServer.flush();
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void updateUI() {

@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -23,7 +24,7 @@ public class AddUserStoryFormController {
 	private TextField authorField;
 	
 	@FXML
-	private TextField descriptionField;
+	private TextArea descriptionField;
 	
 	@FXML
 	private Slider pointSlider;
@@ -43,6 +44,7 @@ public class AddUserStoryFormController {
 			AlertHelper.showAlert(Alert.AlertType.ERROR, owner, "Form Error!", "Please an author.");
 			return;
 		}
+		
 		
 		//create new story
 		StoryFactory.getInstance().addStory(titleField.getText(), authorField.getText(), descriptionField.getText(), (int)pointSlider.getValue());

@@ -26,8 +26,8 @@ public class UserStory implements Serializable{
 		description = descriptionIn;
 		points = pointsIn;
 		comments = new ArrayList<String>();
-		finishDate = 0;
-		sprintStatus = 0;
+		finishDate = -1;
+		sprintStatus = -1;
 		assignee = "None";
 	}
 

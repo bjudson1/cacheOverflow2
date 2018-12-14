@@ -1,13 +1,19 @@
 package cacheOverflow2;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 
-public class dateEntryFormController {
+public class dateEntryFormController implements Initializable{
 	@FXML
 	private Button submitButton;
 	
@@ -29,6 +35,7 @@ public class dateEntryFormController {
 		stage.close();
 	}
 	
+	
 	@FXML
 	// close the window on cancel click
 	public void handleCancelButton(ActionEvent event) {
@@ -39,8 +46,16 @@ public class dateEntryFormController {
 	@FXML
 	public void updateDateLabel(){
 		dateLabel.setText(String.valueOf(Math.round(dateSlider.getValue())));
-		System.out.println("hii");
 	}
 	
-	
+	public void initialize(URL location, ResourceBundle resources) {
+		dateSlider.valueProperty().addListener(new ChangeListener() {
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+			    dateLabel.textProperty().setValue(String.format("Day: %d",(int) dateSlider.getValue()));			    
+			}
+	    });
+	}
 }
+
+	
